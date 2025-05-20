@@ -3,149 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>实时天气预报 (Open-Meteo)</title>
+    <title>实时天气预报 (Open-Meteo) - 优化布局</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f0f2f5; color: #333; display: flex; flex-direction: column; align-items: center; padding: 20px; text-align: center; }
-        .container { background-color: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 800px; }
-        h1 { color: #3498db; margin-bottom: 15px; }
-        h2 { color: #333; margin-top: 20px; margin-bottom: 10px; border-bottom: 2px solid #e0e0e0; padding-bottom: 5px;}
-        p { line-height: 1.6; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .container {
+            background-color: rgba(44, 62, 80, 0.65);
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            padding: 20px 25px;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 100%;
+            max-width: 1300px;
+            box-sizing: border-box;
+        }
+        h1 {
+            color: #5dade2; 
+            margin-bottom: 10px;
+            font-weight: 300;
+            font-size: 2.2em;
+        }
+        #location-info-top {
+            font-weight: 500; 
+            color: #b0c4de;
+            font-size: 1.05em;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #bdc3c7; 
+            margin-top: 0;
+            margin-bottom: 18px;
+            border-bottom: 1px solid rgba(236, 240, 241, 0.2);
+            padding-bottom: 10px;
+            font-weight: 400;
+            font-size: 1.5em;
+        }
+        p { line-height: 1.6; color: #bdc3c7;}
+        a { color: #5dade2; text-decoration: none; }
+        a:hover { text-decoration: underline; }
 
-        #location-info { margin-bottom: 20px; font-weight: bold; color: #555; }
-        #error-message { color: red; margin-bottom: 20px; font-weight: bold; }
+        #error-message { 
+            color: #e74c3c; 
+            margin: 20px auto; 
+            font-weight: bold; 
+            background-color: rgba(231, 76, 60, 0.15);
+            padding:12px 18px; 
+            border-radius: 10px;
+            max-width: 600px;
+        }
 
-        .seven-day-forecast { margin-bottom: 30px; }
-        .day-summary-container { display: flex; overflow-x: auto; padding-bottom: 10px; gap: 10px; justify-content: flex-start; /* Changed for better scroll with many items */ }
-        .day-summary { border: 1px solid #ddd; padding: 15px; border-radius: 8px; cursor: pointer; background-color: #f9f9f9; text-align: center; min-width: 120px; /* Increased min-width */ flex: 0 0 auto; transition: all 0.2s ease-in-out; }
-        .day-summary:hover { background-color: #e9f5ff; border-color: #3498db; transform: translateY(-3px); }
-        .day-summary.active { background-color: #3498db; color: white; border-color: #3498db; font-weight: bold; }
-        .day-summary .date { font-size: 0.9em; color: #555; }
-        .day-summary.active .date { color: #e0e0e0; }
-        .day-summary .icon { font-size: 1.8em; margin: 8px 0; } /* Using text icons */
-        .day-summary .temp { font-size: 0.95em; }
+        .weather-dashboard {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
 
-        .hourly-forecast { margin-top: 20px; border: 1px solid #ccc; padding: 20px; border-radius: 8px; background-color: #fdfdfd; }
-        .hourly-forecast h2 { margin-top: 0; }
-        .hourly-details-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; }
-        .hour-detail { border: 1px solid #eee; padding: 10px; border-radius: 6px; background-color: #fff; text-align: center; }
-        .hour-detail .time { font-weight: bold; font-size: 0.9em; }
-        .hour-detail .icon { font-size: 1.5em; margin: 5px 0;} /* Using text icons */
-        .hour-detail .temp { font-size: 1.1em; margin: 5px 0; }
-        .hour-detail .weather { font-size: 0.8em; color: #666; word-wrap: break-word; }
-        .hidden { display: none; }
+        .left-panel {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .right-panel {
+            flex: 3;
+        }
+        
+        .panel-section {
+            background-color: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px) saturate(150%);
+            -webkit-backdrop-filter: blur(10px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        #today-prominent-weather .today-card {
+            background-color: rgba(93, 173, 226, 0.25);
+            border: 1px solid rgba(93, 173, 226, 0.4);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        #today-prominent-weather .today-card.active,
+        #today-prominent-weather .today-card:hover {
+            background-color: rgba(93, 173, 226, 0.4);
+            box-shadow: 0 4px 20px rgba(93, 173, 226, 0.25);
+            transform: translateY(-2px);
+        }
+        #today-prominent-weather .day-name { font-size: 1.4em; font-weight: 500; margin-bottom: 5px; color: #fff; }
+        #today-prominent-weather .date { font-size: 1em; color: #e0e0e0; margin-bottom: 10px; }
+        #today-prominent-weather .icon { font-size: 3.5em; margin: 10px 0; display: block;}
+        #today-prominent-weather .temp-range { font-size: 1.3em; font-weight: 500; margin-bottom: 5px; color: #fff;}
+        #today-prominent-weather .temp-range .low { color: #b0c4de; }
+        #today-prominent-weather .weather-desc { font-size: 1.1em; color: #ecf0f1; }
+
+        .seven-day-forecast h2 {
+             margin-bottom: 10px;
+        }
+        .other-days-title {
+            font-size: 1.1em;
+            color: #bdc3c7;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            text-align: left;
+            padding-left: 5px;
+            font-weight: 500;
+        }
+
+        .day-summary-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .day-summary {
+            background-color: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(8px) saturate(120%);
+            -webkit-backdrop-filter: blur(8px) saturate(120%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            color: #ecf0f1;
+        }
+        .day-summary:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+        .day-summary.active {
+            background-color: rgba(93, 173, 226, 0.5); 
+            color: white;
+            font-weight: 500;
+            border-color: rgba(93, 173, 226, 0.7);
+        }
+        .day-summary .day-name { font-size: 0.95em; font-weight: 500;}
+        .day-summary .date { font-size: 0.8em; color: #bdc3c7; margin-top: 2px;}
+        .day-summary.active .date { color: #f0f0f0; }
+        .day-summary .icon { font-size: 1.8em; margin: 6px 0; display: block;}
+        .day-summary .temp { font-size: 0.9em; }
+
+        .hourly-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 10px;
+        }
+        .hour-detail {
+            background-color: rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 10px 8px;
+            border-radius: 8px;
+            text-align: center;
+            color: #ecf0f1;
+            transition: background-color 0.3s ease;
+        }
+        .hour-detail:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+        .hour-detail .time { font-weight: bold; font-size: 0.9em; color: #f0f0f0;}
+        .hour-detail .icon { font-size: 1.7em; margin: 5px 0; display: block;}
+        .hour-detail .temp { font-size: 1.1em; margin: 4px 0; font-weight: 500;}
+        .hour-detail .weather { font-size: 0.8em; color: #bdc3c7; word-wrap: break-word; }
+        
+        .hidden { display: none !important; }
         .loader {
-            border: 5px solid #f3f3f3; 
-            border-top: 5px solid #3498db; 
+            border: 5px solid rgba(236, 240, 241, 0.2); 
+            border-top: 5px solid #5dade2; 
             border-radius: 50%;
             width: 40px;
             height: 40px;
             animation: spin 1s linear infinite;
-            margin: 20px auto;
+            margin: 30px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .attribution a {
+            color: #a0b2c3;
+            font-size: 0.85em;
+        }
+        .attribution a:hover {
+            color: #5dade2;
+        }
+
+        @media (max-width: 860px) {
+            .weather-dashboard {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .left-panel,
+            .right-panel {
+                flex: 1 1 100%;
+                min-height: auto;
+            }
+            .container {
+                padding: 15px;
+            }
+            h1 {font-size: 1.8em; margin-bottom: 10px;}
+            #location-info-top { margin-bottom: 15px; font-size: 1em;}
+            h2 {font-size: 1.3em; margin-bottom: 12px;}
+            #today-prominent-weather .icon { font-size: 3em; }
+            #today-prominent-weather .temp-range { font-size: 1.1em; }
+            .day-summary-container {
+                 grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>实时天气预报 (Open-Meteo)</h1>
-        <p id="instruction">正在获取您的位置信息...</p>
-        <div id="loader" class="loader hidden"></div>
-        <div id="error-message"></div>
-        <div id="location-info"></div>
-
-        <div id="weather-content" class="hidden">
-            <div class="seven-day-forecast">
-                <h2>未来7天天气</h2>
-                <div id="seven-day-container" class="day-summary-container">
-                    <!-- 7-day forecast will be populated by JavaScript -->
+        <h1>实时天气预报</h1>
+        <div id="location-info-top"></div>
+        <p id="instruction" style="color: #e0e0e0; margin-bottom:20px;">正在获取您的位置信息...</p>
+        <div id="loader" class="loader"></div>
+        <div id="error-message" class="hidden"></div>
+        
+        <div id="weather-dashboard-content" class="weather-dashboard hidden">
+            <div class="left-panel">
+                <div class="seven-day-forecast panel-section">
+                    <h2>未来天气</h2>
+                    <div id="today-prominent-weather">
+                        <!-- Today's prominent forecast will be populated by JavaScript -->
+                    </div>
+                    <div class="other-days-title">未来6天</div>
+                    <div id="next-days-container" class="day-summary-container">
+                        <!-- Next 6 days forecast will be populated by JavaScript -->
+                    </div>
                 </div>
             </div>
-
-            <div id="hourly-forecast-section" class="hourly-forecast hidden">
-                <h2 id="hourly-title">分时天气详情</h2>
-                <div id="hourly-details-container" class="hourly-details-grid">
-                    <!-- Hourly details will be populated by JavaScript -->
+            <div class="right-panel">
+                <div id="hourly-forecast-section" class="hourly-forecast panel-section hidden">
+                    <h2 id="hourly-title">分时天气详情</h2>
+                    <div id="hourly-details-container" class="hourly-details-grid">
+                        <!-- Hourly details will be populated by JavaScript -->
+                    </div>
                 </div>
             </div>
         </div>
-         <p style="font-size: 0.8em; color: #777; margin-top: 20px;">天气数据由 <a href="https://open-meteo.com/" target="_blank">Open-Meteo.com</a> 提供。</p>
+
+        <p class="attribution" style="margin-top: 25px;">天气数据由 <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo.com</a> 提供。</p>
     </div>
 
     <script>
         const instructionText = document.getElementById('instruction');
         const loader = document.getElementById('loader');
         const errorMessage = document.getElementById('error-message');
-        const locationInfo = document.getElementById('location-info');
-        const weatherContent = document.getElementById('weather-content');
-        const sevenDayContainer = document.getElementById('seven-day-container');
+        const weatherDashboardContent = document.getElementById('weather-dashboard-content');
+        
+        const locationInfoTopDiv = document.getElementById('location-info-top');
+        const todayProminentWeatherDiv = document.getElementById('today-prominent-weather');
+        const nextDaysContainer = document.getElementById('next-days-container');
+        
         const hourlyForecastSection = document.getElementById('hourly-forecast-section');
         const hourlyTitle = document.getElementById('hourly-title');
         const hourlyDetailsContainer = document.getElementById('hourly-details-container');
 
-        let dailyWeatherDataStore = {}; // Store daily and associated hourly data
+        let dailyWeatherDataStore = {};
         let currentLatitude, currentLongitude;
 
-        // WMO Weather interpretation codes mapping
-        // Simplified, you can expand this with more icons and detailed Chinese descriptions
         function getWeatherInfoFromCode(code) {
             const weatherMap = {
-                0: { description: '晴朗', icon: '☀️' },
-                1: { description: '少云', icon: '🌤️' },
-                2: { description: '局部多云', icon: '🌥️' },
-                3: { description: '阴天', icon: '☁️' },
-                45: { description: '雾', icon: '🌫️' },
-                48: { description: '冻雾', icon: '🌫️❄️' },
-                51: { description: '毛毛雨(弱)', icon: '🌦️' },
-                53: { description: '毛毛雨(中)', icon: '🌦️' },
-                55: { description: '毛毛雨(强)', icon: '🌦️' },
-                56: { description: '冻毛毛雨(弱)', icon: 'Sleet' },
-                57: { description: '冻毛毛雨(强)', icon: 'Sleet' },
-                61: { description: '小雨', icon: '🌧️' },
-                63: { description: '中雨', icon: '🌧️' },
-                65: { description: '大雨', icon: '🌧️☔' },
-                66: { description: '冻雨(弱)', icon: 'Sleet' },
-                67: { description: '冻雨(强)', icon: 'Sleet' },
-                71: { description: '小雪', icon: '🌨️' },
-                73: { description: '中雪', icon: '🌨️' },
-                75: { description: '大雪', icon: '❄️' },
-                77: { description: '米雪', icon: '❄️' },
-                80: { description: '阵雨(弱)', icon: '🌦️' },
-                81: { description: '阵雨(中)', icon: '🌦️☔' },
-                82: { description: '阵雨(强)', icon: '⛈️' },
-                85: { description: '阵雪(弱)', icon: '🌨️' },
-                86: { description: '阵雪(强)', icon: '❄️☃️' },
-                95: { description: '雷暴', icon: '⛈️' }, // Slight/moderate
-                96: { description: '雷暴伴有小冰雹', icon: '⛈️🧊' },
-                99: { description: '雷暴伴有大冰雹', icon: '⛈️🧊' },
+                0: { description: '晴朗', icon: '☀️' }, 
+                1: { description: '少云', icon: '🌤️' }, 
+                2: { description: '局部多云', icon: '🌥️' }, 
+                3: { description: '阴天', icon: '☁️' }, 
+                45: { description: '雾', icon: '🌫️' }, 
+                48: { description: '冻雾', icon: '🌫️' }, 
+                51: { description: '毛毛雨(弱)', icon: '💧' }, 
+                53: { description: '毛毛雨(中)', icon: '💧💧' }, 
+                55: { description: '毛毛雨(强)', icon: '🌧️' }, 
+                56: { description: '冻毛毛雨(弱)', icon: '🥶💧' }, 
+                57: { description: '冻毛毛雨(强)', icon: '🥶🌧️' }, 
+                61: { description: '小雨', icon: '🌦️' }, 
+                63: { description: '中雨', icon: '🌧️' }, 
+                65: { description: '大雨', icon: '⛈️' }, 
+                66: { description: '冻雨(弱)', icon: '🧊💧' }, 
+                67: { description: '冻雨(强)', icon: '🧊🌧️' }, 
+                71: { description: '小雪', icon: '🌨️' }, 
+                73: { description: '中雪', icon: '❄️' }, 
+                75: { description: '大雪', icon: '☃️' }, 
+                77: { description: '米雪', icon: '❄️粒' }, 
+                80: { description: '阵雨(弱)', icon: '🌦️' }, 
+                81: { description: '阵雨(中)', icon: '🌧️☔' }, 
+                82: { description: '阵雨(强)', icon: '쏟💦' }, 
+                85: { description: '阵雪(弱)', icon: '🌨️' }, 
+                86: { description: '阵雪(强)', icon: '☃️❄️' }, 
+                95: { description: '雷暴', icon: '⚡️' }, 
+                96: { description: '雷暴伴小冰雹', icon: '⛈️🧊' }, 
+                99: { description: '雷暴伴大冰雹', icon: '⛈️🧊❄️' } 
             };
-            return weatherMap[code] || { description: '未知', icon: '❓' };
+            return weatherMap[code] || { description: '未知 ('+code+')', icon: '❓' };
         }
 
         function showLoader() {
             loader.classList.remove('hidden');
-            instructionText.classList.add('hidden');
-            weatherContent.classList.add('hidden');
-            errorMessage.textContent = '';
+            instructionText.classList.remove('hidden');
+            weatherDashboardContent.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            errorMessage.innerHTML = '';
         }
 
         function hideLoader() {
             loader.classList.add('hidden');
+            instructionText.classList.add('hidden');
         }
 
         function showError(message) {
             hideLoader();
-            errorMessage.textContent = message;
-            instructionText.textContent = '无法加载天气信息。';
-            instructionText.classList.remove('hidden');
+            errorMessage.innerHTML = message; 
+            errorMessage.classList.remove('hidden');
+            weatherDashboardContent.classList.add('hidden');
+        }
+        
+        function setActiveDay(selectedElement) {
+            const todayCard = todayProminentWeatherDiv.querySelector('.today-card');
+            if (todayCard) todayCard.classList.remove('active');
+
+            document.querySelectorAll('#next-days-container .day-summary').forEach(el => el.classList.remove('active'));
+            
+            if (selectedElement) selectedElement.classList.add('active');
         }
 
         function displaySevenDayForecast(daily, hourlyTimes, hourlyTemperatures, hourlyWeatherCodes, timezone) {
-            sevenDayContainer.innerHTML = '';
-            dailyWeatherDataStore = {}; // Clear previous data
+            todayProminentWeatherDiv.innerHTML = '';
+            nextDaysContainer.innerHTML = '';
+            dailyWeatherDataStore = {};
 
             daily.time.forEach((dateString, index) => {
-                const date = new Date(dateString + 'T00:00:00'); // Ensure it parses as local date
-                const dayName = index === 0 ? '今天' : date.toLocaleDateString('zh-CN', { weekday: 'short' });
+                const date = new Date(dateString + 'T00:00:00');
+                const dayName = index === 0 ? '今天' : date.toLocaleDateString('zh-CN', { weekday: 'long' });
                 const formattedDate = date.toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' });
                 const weatherInfo = getWeatherInfoFromCode(daily.weathercode[index]);
 
@@ -156,20 +362,20 @@
                     low: daily.temperature_2m_min[index].toFixed(1) + '°C',
                     weather: weatherInfo.description,
                     icon: weatherInfo.icon,
-                    fullDate: dateString, // Store full date for filtering hourly data
-                    hourly: [] // Initialize hourly array
+                    fullDate: dateString,
+                    hourly: []
                 };
 
-                // Filter and store hourly data for this day
-                const dayStartEpoch = new Date(dateString + 'T00:00:00Z').getTime(); // UTC for comparison
+                const dayStartEpoch = new Date(dateString + 'T00:00:00Z').getTime();
                 const dayEndEpoch = new Date(dateString + 'T23:59:59Z').getTime();
 
                 for (let i = 0; i < hourlyTimes.length; i++) {
-                    const hourlyTimeEpoch = new Date(hourlyTimes[i] + 'Z').getTime(); // API times are UTC
+                    const hourlyTimeEpoch = new Date(hourlyTimes[i]).getTime();
                     if (hourlyTimeEpoch >= dayStartEpoch && hourlyTimeEpoch <= dayEndEpoch) {
                         const hourWeatherInfo = getWeatherInfoFromCode(hourlyWeatherCodes[i]);
+                        const localHourTime = new Date(hourlyTimes[i]);
                         dayData.hourly.push({
-                            time: new Date(hourlyTimes[i] + 'Z').toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: timezone }),
+                            time: localHourTime.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: timezone }),
                             temp: hourlyTemperatures[i].toFixed(1) + '°C',
                             weather: hourWeatherInfo.description,
                             icon: hourWeatherInfo.icon
@@ -178,40 +384,55 @@
                 }
                 dailyWeatherDataStore[dateString] = dayData;
 
-                const dayElement = document.createElement('div');
-                dayElement.classList.add('day-summary');
-                dayElement.innerHTML = `
-                    <div><strong>${dayData.dayName}</strong></div>
-                    <div class="date">${dayData.date}</div>
-                    <div class="icon">${dayData.icon}</div>
-                    <div>${dayData.weather}</div>
-                    <div class="temp">${dayData.low} / ${dayData.high}</div>
-                `;
-                dayElement.addEventListener('click', () => {
-                    displayHourlyForecast(dateString);
-                    document.querySelectorAll('.day-summary').forEach(el => el.classList.remove('active'));
-                    dayElement.classList.add('active');
-                });
-                sevenDayContainer.appendChild(dayElement);
+                if (index === 0) {
+                    const todayElement = document.createElement('div');
+                    todayElement.classList.add('today-card');
+                    todayElement.innerHTML = `
+                        <div class="day-name">${dayData.dayName}</div>
+                        <div class="date">${dayData.date}</div>
+                        <div class="icon">${dayData.icon}</div>
+                        <div class="temp-range">${dayData.low} / ${dayData.high}</div>
+                        <div class="weather-desc">${dayData.weather}</div>
+                    `;
+                    todayElement.addEventListener('click', () => {
+                        displayHourlyForecast(dateString);
+                        setActiveDay(todayElement);
+                    });
+                    todayProminentWeatherDiv.appendChild(todayElement);
+                } else {
+                    const dayElement = document.createElement('div');
+                    dayElement.classList.add('day-summary');
+                    dayElement.innerHTML = `
+                        <div class="day-name">${dayData.dayName}</div>
+                        <div class="date">${dayData.date}</div>
+                        <div class="icon">${dayData.icon}</div>
+                        <div class="temp">${dayData.low} / ${dayData.high}</div>
+                    `;
+                    dayElement.addEventListener('click', () => {
+                        displayHourlyForecast(dateString);
+                        setActiveDay(dayElement);
+                    });
+                    nextDaysContainer.appendChild(dayElement);
+                }
             });
             
-            weatherContent.classList.remove('hidden');
-            instructionText.classList.add('hidden');
+            weatherDashboardContent.classList.remove('hidden');
+            hourlyForecastSection.classList.remove('hidden');
 
             if (daily.time.length > 0) {
-                displayHourlyForecast(daily.time[0]); // Display today's hourly by default
-                const firstDayElement = sevenDayContainer.querySelector('.day-summary');
-                if (firstDayElement) {
-                    firstDayElement.classList.add('active');
-                }
+                displayHourlyForecast(daily.time[0]);
+                const todayCardElement = todayProminentWeatherDiv.querySelector('.today-card');
+                if (todayCardElement) setActiveDay(todayCardElement);
             }
         }
 
         function displayHourlyForecast(dateString) {
             const dayData = dailyWeatherDataStore[dateString];
+            hourlyForecastSection.classList.remove('hidden');
+
             if (!dayData) {
-                showError('无法找到选定日期的详细信息。');
-                hourlyForecastSection.classList.add('hidden');
+                hourlyTitle.textContent = '分时天气详情';
+                hourlyDetailsContainer.innerHTML = '<p style="color: #bdc3c7;">请先选择一天查看分时数据。</p>';
                 return;
             }
 
@@ -219,7 +440,7 @@
             hourlyDetailsContainer.innerHTML = '';
 
             if (!dayData.hourly || dayData.hourly.length === 0) {
-                hourlyDetailsContainer.innerHTML = '<p>该日暂无详细分时数据。</p>';
+                hourlyDetailsContainer.innerHTML = '<p style="color: #bdc3c7;">该日暂无详细分时数据。</p>';
             } else {
                 dayData.hourly.forEach(hourData => {
                     const hourElement = document.createElement('div');
@@ -233,74 +454,75 @@
                     hourlyDetailsContainer.appendChild(hourElement);
                 });
             }
-            hourlyForecastSection.classList.remove('hidden');
         }
 
         async function fetchWeatherData(lat, lon) {
             currentLatitude = lat;
             currentLongitude = lon;
             showLoader();
-            locationInfo.textContent = `纬度: ${lat.toFixed(2)}, 经度: ${lon.toFixed(2)}`;
+            locationInfoTopDiv.textContent = `📍 当前位置: 纬度 ${lat.toFixed(2)}°, 经度 ${lon.toFixed(2)}°`;
             
-            // Open-Meteo API URL for 7-day daily forecast and hourly forecast for these days
-            // We request temperature_2m_max, temperature_2m_min, weathercode for daily
-            // And temperature_2m, weathercode for hourly.
-            // `timezone=auto` tells Open-Meteo to use the timezone of the coordinates.
             const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weathercode&timeformat=iso8601&forecast_days=7&timezone=auto`;
 
             try {
                 const response = await fetch(apiUrl);
+                hideLoader();
                 if (!response.ok) {
-                    showError(`获取天气数据失败: ${response.status} ${response.statusText}`);
+                    showError(`获取天气数据失败 (代码: ${response.status})。请稍后再试或检查网络连接。`);
                     return;
                 }
                 const data = await response.json();
-                console.log('Open-Meteo API Response:', data); // For debugging
+                console.log('Open-Meteo API Response:', data);
 
                 if (data.daily && data.daily.time && data.daily.time.length > 0 && data.hourly && data.hourly.time) {
-                    hideLoader();
-                    // Pass daily data, all hourly times, all hourly temps, all hourly codes, and the resolved timezone
-                    displaySevenDayForecast(data.daily, data.hourly.time, data.hourly.temperature_2m, data.hourly.weathercode, data.timezone);
+                    weatherDashboardContent.classList.remove('hidden');
+                    errorMessage.classList.add('hidden');
+                    displaySevenDayForecast(data.daily, data.hourly.time, data.hourly.temperature_2m, data.hourly.weathercode, data.timezone || 'UTC');
                 } else {
-                    showError('未找到完整天气数据。API响应可能不完整或格式不正确。详情请查看控制台。');
+                    showError('天气数据格式不完整或无效。请查看控制台获取详情。');
                     console.error("API response missing expected daily or hourly data structure:", data);
                 }
             } catch (error) {
+                hideLoader();
                 console.error('Fetch Weather Error:', error);
                 showError('请求天气数据时发生网络错误。请检查您的网络连接。');
             }
         }
 
         function getLocation() {
+            showLoader();
             if (navigator.geolocation) {
-                instructionText.textContent = '请求您的位置权限...请在浏览器提示中允许。';
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
-                        instructionText.textContent = '位置获取成功，正在加载天气数据...';
+                        instructionText.textContent = '✅ 位置获取成功，加载天气中...';
                         fetchWeatherData(position.coords.latitude, position.coords.longitude);
                     },
                     (error) => {
-                        let msg = '获取地理位置失败: ';
+                        hideLoader();
+                        let msg = '❌ 获取地理位置失败: ';
                         switch(error.code) {
                             case error.PERMISSION_DENIED:
-                                msg += "用户拒绝了地理位置请求。请允许位置访问以查看当地天气。";
+                                msg += "您已拒绝位置权限。请在浏览器设置中允许位置访问以获取当地天气预报。";
                                 break;
                             case error.POSITION_UNAVAILABLE:
-                                msg += "位置信息不可用。";
+                                msg += "当前位置信息不可用。请检查GPS或网络连接。";
                                 break;
                             case error.TIMEOUT:
-                                msg += "获取位置信息超时。";
+                                msg += "获取位置信息超时。请尝试刷新页面。";
                                 break;
                             default:
-                                msg += "发生未知错误。";
+                                msg += "获取位置时发生未知错误。";
                                 break;
                         }
-                        showError(msg + ' 您可以尝试刷新页面或检查浏览器位置权限设置。');
+                        showError(msg);
+                        locationInfoTopDiv.textContent = '无法确定您的位置。'
                     },
-                    { timeout: 10000 } 
+                    { timeout: 10000, enableHighAccuracy: true }
                 );
             } else {
+                hideLoader();
                 showError("您的浏览器不支持地理位置功能。无法获取实时天气。");
+                locationInfoTopDiv.textContent = '浏览器不支持地理位置服务。'
             }
         }
 
